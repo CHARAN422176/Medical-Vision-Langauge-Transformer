@@ -219,8 +219,9 @@ class Conv_layer(nn.Module):
                                    ape=swin_config.MODEL.SWIN.APE,
                                    patch_norm=swin_config.MODEL.SWIN.PATCH_NORM,
                                    use_checkpoint=swin_config.TRAIN.USE_CHECKPOINT)
-            resume_path = './modules/swin_small_patch4_window7_224.pth'
+            # resume_path = './modules/swin_small_patch4_window7_224.pth'
             # resume_path = './checkpoints/swin_base_patch4_window7_224.pth'
+            resume_path = '/kaggle/input/swin-rgc-roco-medicat/other/default/2/swin_small_patch4_window7_224.pth'
             checkpoint = torch.load(resume_path, map_location='cpu')
             conv.load_state_dict(checkpoint['model'], strict=False)
             print("load swin-transformer weight from", resume_path)
