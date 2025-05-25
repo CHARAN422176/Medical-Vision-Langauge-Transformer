@@ -498,11 +498,11 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--device', help='gpu number to train the model', default=0, type=int)
     parser.add_argument('--batch', help='batch size for training and testing', default=32, type=int)
-    parser.add_argument('--epochs', help='epochs', default=200, type=int)
+    parser.add_argument('--epochs', help='epochs', default=10, type=int)
     parser.add_argument('--max_length', help='max token length', default=None, type=int)
     parser.add_argument('--beam_search', help='whether to use beam search during inference', action='store_true')
     parser.add_argument('--cache_image', help='whether to save images in the memory', action='store_true')
-    parser.add_argument('--dataset', help='dataset to run image caption', choices=['iu_xray', 'mimic', None], type=str, default='mimic')
+    parser.add_argument('--dataset', help='dataset to run image caption', choices=['iu_xray', 'mimic', None], type=str, default='iu_xray')
     parser.add_argument('--conv', help='convolutional layer for images',
                         choices=['resnet101', 'linear',  'resnet50', 'swintransformer'], type=str, default='resnet101')
     parser.add_argument('--test_freq', help='frequency to print test results', type=int, default=10)
