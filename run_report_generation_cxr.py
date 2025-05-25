@@ -81,8 +81,10 @@ class IuxrayMultiImageDataset(BaseDataset):
         super(IuxrayMultiImageDataset, self).__init__(split=split)
         self.args = args
         self.split = split
-        self.image_dir = 'dataset/iu_xray/images/'
-        self.ann_path = 'dataset/iu_xray/annotation.json'
+        # self.image_dir = 'dataset/iu_xray/images/'
+        # self.ann_path = 'dataset/iu_xray/annotation.json'
+        self.image_dir = '/kaggle/input/iu-xray/iu_xray/images/'
+        self.ann_path = '/kaggle/input/iu-xray/iu_xray/annotation.json'
         self.max_length = 80
 
         self.ann = json.loads(open(self.ann_path, 'r').read())
