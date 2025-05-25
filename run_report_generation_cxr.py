@@ -457,42 +457,90 @@ def imageCaptionTaskUniLM(args):
     #              args.dataset + '-' + args.learning_strategy
     model_path = f"./checkpoints/report_generation-{'pretrained' if args.pretrained else ''}-{args.conv}-{args.dataset}-{args.learning_strategy}-{time_tmp}"
 
-    for epoch in range(epochs):
+    # for epoch in range(epochs):
+    #     t = time.time()
+    #     n = len(train_data_loader)
+    #     total_loss = 0
+    #     for _step, (image, caption_ids, gt_caption, mlm_labels, _) in enumerate(train_data_loader):
+    #         # for IU-Xray in R2Gen, image.shape will be [batch, 2, 3, 224,224]
+    #         # for others, it will be [batch, 3, 224, 224]
+    #         image = image.cuda()
+    #         caption_ids = caption_ids.cuda()
+    #         mlm_labels = mlm_labels.cuda()
+
+    #         MLM_logits = model(image, caption_ids, learning_strategy=args.learning_strategy, num_beams=0)  # batch, vocab_size, seq_len
+
+    #         loss= F.cross_entropy(MLM_logits, mlm_labels, ignore_index=-100)
+    #         loss.backward()
+    #         optimizer.step()
+    #         optimizer.zero_grad()
+    #         cur_loss = loss.item() * image.shape[0]
+    #         total_loss += cur_loss
+
+    #     print("epoch:", epoch, "using time:", time.time() - t, "loss:", total_loss / n)
+    #     # torch.save(model, './checkpoints/report_generation.model')
+    #     test_freq = args.test_freq
+    #     if epoch > args.epochs/2:
+    #         test_freq = int(args.test_freq/2)
+
+    #     if (epoch + 1) % test_freq == 0:
+    #         search_mode = 'beam' if args.beam_search else 'greedy'
+    #         # eval_results = test(model, test_data_loader, learning_strategy=args.learning_strategy, mode=search_mode, dataset=args.dataset, output_file_name=f'report_generation-{args.dataset}-{args.learning_strategy}-{time_tmp}')
+    #         # print("###############beam search:")
+    #         eval_results = test(model, test_data_loader, learning_strategy=args.learning_strategy, mode=search_mode, dataset=args.dataset, output_file_name=f'report_generation-{args.dataset}-{args.learning_strategy}-{time_tmp}')
+
+    #     if (epoch + 1) % (test_freq*2) == 0:
+    #         save_path = model_path + '-' + str(epoch + 1)
+    #         print("save to", save_path)
+    #         torch.save(model, save_path)
+    best_metric = float('inf')  # or -inf if higher is better, e.g., BLEU
+
+    for epoch in range(args.epochs):
         t = time.time()
         n = len(train_data_loader)
         total_loss = 0
         for _step, (image, caption_ids, gt_caption, mlm_labels, _) in enumerate(train_data_loader):
-            # for IU-Xray in R2Gen, image.shape will be [batch, 2, 3, 224,224]
-            # for others, it will be [batch, 3, 224, 224]
             image = image.cuda()
             caption_ids = caption_ids.cuda()
             mlm_labels = mlm_labels.cuda()
 
-            MLM_logits = model(image, caption_ids, learning_strategy=args.learning_strategy, num_beams=0)  # batch, vocab_size, seq_len
-
-            loss= F.cross_entropy(MLM_logits, mlm_labels, ignore_index=-100)
+            MLM_logits = model(image, caption_ids, learning_strategy=args.learning_strategy, num_beams=0)
+            loss = F.cross_entropy(MLM_logits, mlm_labels, ignore_index=-100)
             loss.backward()
             optimizer.step()
             optimizer.zero_grad()
+
             cur_loss = loss.item() * image.shape[0]
             total_loss += cur_loss
 
         print("epoch:", epoch, "using time:", time.time() - t, "loss:", total_loss / n)
-        # torch.save(model, './checkpoints/report_generation.model')
         test_freq = args.test_freq
-        if epoch > args.epochs/2:
-            test_freq = int(args.test_freq/2)
+        # if epoch > args.epochs / 2:
+            # test_freq = int(args.test_freq / 2)
 
         if (epoch + 1) % test_freq == 0:
             search_mode = 'beam' if args.beam_search else 'greedy'
-            # eval_results = test(model, test_data_loader, learning_strategy=args.learning_strategy, mode=search_mode, dataset=args.dataset, output_file_name=f'report_generation-{args.dataset}-{args.learning_strategy}-{time_tmp}')
-            # print("###############beam search:")
             eval_results = test(model, test_data_loader, learning_strategy=args.learning_strategy, mode=search_mode, dataset=args.dataset, output_file_name=f'report_generation-{args.dataset}-{args.learning_strategy}-{time_tmp}')
 
-        if (epoch + 1) % (test_freq*2) == 0:
-            save_path = model_path + '-' + str(epoch + 1)
-            print("save to", save_path)
-            torch.save(model, save_path)
+            # Assuming eval_results contains a key 'loss' or some metric you want to minimize:
+            current_metric = eval_results.get('loss', None)
+            if current_metric is None:
+                # If 'loss' not available, maybe use a score (e.g., BLEU_4, METEOR) where higher is better
+                # For example:
+                current_metric = -eval_results.get('test_BLEU_4', 0)  # negate because we want to minimize metric here
+
+            if current_metric < best_metric:
+                print(f"Improved metric from {best_metric} to {current_metric}, saving model...")
+                best_metric = current_metric
+                save_path = model_path + '-best'
+                torch.save(model.state_dict(), save_path)
+
+        # Optionally save checkpoints every (test_freq*2) epochs as backups (unconditional)
+        # if (epoch + 1) % (test_freq * 2) == 0:
+            # save_path = model_path + '-' + str(epoch + 1)
+            # print("Saving checkpoint to", save_path)
+            # torch.save(model.state_dict(), save_path)
+
 
 # python run_report_generation.py --conv swintransformer --test_frq 5 --pretrained --pretrained_path ./checkpoints/swin-roco-rgc-medicat --epochs 300
 
