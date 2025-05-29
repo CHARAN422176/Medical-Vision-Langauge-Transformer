@@ -25,7 +25,7 @@ class CXRDatasetForRetrieval(Dataset):
         self.config = config
         self.split = split
         self.args = args
-        self.data_root = os.path.join('./dataset/iu_xray/')
+        self.data_root = '/kaggle/input/iu-xray/iu_xray'
 
         self.data_path_cleaned = os.path.join(self.data_root, 'annotation.json')
 
