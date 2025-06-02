@@ -21,7 +21,7 @@ class RetrievalPretrainDataset(Dataset):
         super().__init__()
         self.config = config
         self.split = split
-        self.data_root = os.path.join('./dataset/RGC/', split)
+        self.data_root = os.path.join('./RGC/', split)
         assert split in ['train', 'test'], 'Dataset has to be train set or test set'
         self.data_path = os.path.join(self.data_root, split + '_img_idx2path' + '.pkl')
 
