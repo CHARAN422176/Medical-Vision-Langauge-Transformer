@@ -1,0 +1,15 @@
+This dataset is under MedPix License (https://medpix.nlm.nih.gov/licensing) and National Library of Medicine (NLM) Copyright (https://www.nlm.nih.gov/web_policies.html#copyright). User may not reproduce, redistribute, or otherwise transfer any cases.
+
+
+Medpix License
+
+MedPix images and case materials were contributed by many individuals. They are organized, reviewed, approved, and curated free of charge for your personal use and for local teaching at your institution - including distribution of handouts and syllabi.
+
+For anything other than personal use, you should respect the original contributor and contact them for additional permission requests.
+
+
+NLM Copyright
+
+Copyright Protections for Non-Government Works: When using NLM Web sites, you may encounter documents, illustrations, photographs, or other content contributed by or licensed from private individuals, companies, or organizations that may be protected by U.S. and international copyright laws. You can sometimes tell if content is copyrighted if it has the copyright symbol, the name of the copyright holder, or the statement "All rights reserved." However, a copyright notice is not required by law and therefore not all copyrighted content is necessarily marked in this way.
+
+Transmission or reproduction of copyrighted items (beyond that allowed by fair use as defined in the U.S. copyright laws) requires the written permission of the copyright holders.
