@@ -358,7 +358,7 @@ def parse_args():
     parser = argparse.ArgumentParser('Train Cognition Network')
     parser.add_argument('--device', help='gpu number to train the model', default=0, type=int)
     parser.add_argument('--lr', help='learning rate', default=1e-6, type=float)
-    parser.add_argument('--epochs', default=800, type=int)
+    parser.add_argument('--epochs', default=1, type=int)
     parser.add_argument('--pretrained', action='store_true')
     parser.add_argument('--pretrained_path', default='./checkpoints/swin-bert-base', type=str)
     parser.add_argument('--batch', help='batch', default=32, type=int)
