@@ -25,7 +25,8 @@ def preprocess_pretrain():
 
             image_path_rlt = entry['image']
             img_id = entry['img_id']
-            caption = entry['caption']
+            # caption = entry['caption']
+            caption = entry.get('caption', 'No caption available')
             caption_id = entry['cap_id']
 
             image_path = os.path.join(data_root, 'images', image_path_rlt)
