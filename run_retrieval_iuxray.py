@@ -330,7 +330,7 @@ def RetrievalTask(args):
     time_tmp = time.asctime(time.localtime(time.time())).replace(':', '-')
     if args.do_train:
         # torch.cuda.set_device(args.device)
-        train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=8)
+        train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=4)
         logger.info("start training...")
         model.train()
 
@@ -339,7 +339,7 @@ def RetrievalTask(args):
 
     output_file = f'./results/retrieval/IUXray_report_test_result_{time_tmp}.pt'
     if args.do_test:
-        test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=8)
+        test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=4)
         testRetrieval(model, test_dataloader, output_file=output_file)
 
 
