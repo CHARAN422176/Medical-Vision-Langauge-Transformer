@@ -3,12 +3,16 @@ import torch
 import torch.nn as nn
 from torch.hub import load_state_dict_from_url
 from modules.swin_transformer_config import get_config
+from torchvision.models import ResNet101_Weights
 
 class resnet101_without_fc(torchvision.models.ResNet):
     def __init__(self, pretrained, progress):
         super().__init__(block=torchvision.models.resnet.Bottleneck, layers=[3, 4, 23, 3], num_classes=1000)
         if pretrained:
-            state_dict = load_state_dict_from_url(torchvision.models.resnet.model_urls['resnet101'], progress=progress)
+            # state_dict = load_state_dict_from_url(torchvision.models.resnet.model_urls['resnet101'], progress=progress)
+            # self.load_state_dict(state_dict)
+            weights = ResNet101_Weights.DEFAULT
+            state_dict = weights.get_state_dict(progress=progress)
             self.load_state_dict(state_dict)
 
     def _forward_impl(self, x):
